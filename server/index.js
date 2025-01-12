@@ -21,10 +21,14 @@ const io = new Server(server, {
 io.on("connection", (socket) => {
     console.log(`User connected: ${socket.id}`);
 
+    socket.on("joinRoom", (data) => {
+        socket.join(data);
+    })
     socket.on("sendMessage", (data) => {
         console.log(data.message);
-        socket.broadcast.emit("receiveMessage", data);
+        socket.to(data.room).emit("receiveMessage", data);
     })
+
 });
 
 server.listen(3001, () => {
